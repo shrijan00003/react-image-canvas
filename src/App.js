@@ -32,7 +32,8 @@ function App() {
         canvasObjects={canvasObjects}
       />
       <input type="file" onChange={fileChangedHandler} />
-      <button onClick={uploadHandler}>Upload!</button>
+      <button onClick={uploadHandler}>Next</button>
+      <br />
     </div>
   );
 }

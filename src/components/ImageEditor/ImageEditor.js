@@ -15,6 +15,8 @@ const ImageEditor = props => {
     filter: false
   });
 
+  let stageNode = React.createRef();
+
   const [selectedShapeName, setSelectedShapeName] = useState("");
 
   const handleStageMouseDown = e => {
@@ -51,6 +53,11 @@ const ImageEditor = props => {
     setAvailableOptions(newOptions);
   }, [availableOptions]);
 
+  const onSaveImage = e => {
+    console.log("event here", e);
+    console.log("stage node here", stageNode.getStage().toDataURL());
+  };
+
   return (
     <>
       <p> Hello from editor !!</p>
@@ -67,15 +74,20 @@ const ImageEditor = props => {
           width={props.canvasWidth}
           height={props.canvasHeight}
           onMouseDown={handleStageMouseDown}
+          ref={node => {
+            stageNode = node;
+          }}
         >
           <Layer>
             {props.canvasObjects &&
-              Object.keys(props.canvasObjects).map((key, index) => (
-                <ImageComponent key={index} file={props.canvasObjects[key]} />
+              props.canvasObjects.map((obj, index) => (
+                <ImageComponent key={index} file={obj} />
               ))}
             <TransformerComponent selectedShapeName={selectedShapeName} />
           </Layer>
         </Stage>
+        <br />
+        <button onClick={onSaveImage}>save image</button>
       </div>
     </>
   );
