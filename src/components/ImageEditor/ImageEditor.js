@@ -4,9 +4,7 @@ import useImage from "use-image";
 import TransformerComponent from "./Transformer";
 
 const ImageComponent = ({ file }) => {
-  console.log(file);
   const [image] = useImage(file.imgUrl);
-  console.log("image here", image);
   return <Image image={image} name={file.name} draggable />;
 };
 
@@ -20,7 +18,6 @@ const ImageEditor = props => {
   const [selectedShapeName, setSelectedShapeName] = useState("");
 
   const handleStageMouseDown = e => {
-    console.log("event here", e);
     // clicked on stage - cler selection
     if (e.target === e.target.getStage()) {
       setSelectedShapeName("");
@@ -36,7 +33,6 @@ const ImageEditor = props => {
     // find clicked rect by its name
     const name = e.target.name();
 
-    console.log("name here", name);
     // const rect = this.state.rectangles.find(r => r.name === name);
     // if (rect) {
     //   this.setState({
@@ -53,7 +49,7 @@ const ImageEditor = props => {
   useEffect(() => {
     const newOptions = { ...availableOptions, shapes: false };
     setAvailableOptions(newOptions);
-  }, []);
+  }, [availableOptions]);
 
   return (
     <>

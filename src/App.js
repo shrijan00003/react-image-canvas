@@ -16,12 +16,10 @@ function App() {
       type: imgFile.type,
       imgUrl: URL.createObjectURL(imgFile)
     };
-    console.log("image object", imgObj);
     const newCanvasObject = [...canvasObjects, imgObj];
     setcanvasObject(newCanvasObject);
   };
   const uploadHandler = () => {
-    console.log("canvasobjets", canvasObjects);
     console.log("image will be uploaded here");
   };
 
