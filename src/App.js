@@ -1,24 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import UUID from "uuid/v4";
+
+import "./App.css";
+import MyEditor from "./components/ImageEditor/ImageEditor";
 
 function App() {
+  const [canvasObjects, setcanvasObject] = useState([]);
+
+  const fileChangedHandler = e => {
+    const imgFile = e.target.files[0];
+    const imgObj = {
+      name: imgFile.name,
+      id: UUID(),
+      file: imgFile,
+      type: imgFile.type,
+      imgUrl: URL.createObjectURL(imgFile)
+    };
+    console.log("image object", imgObj);
+    const newCanvasObject = [...canvasObjects, imgObj];
+    setcanvasObject(newCanvasObject);
+  };
+  const uploadHandler = () => {
+    console.log("canvasobjets", canvasObjects);
+    console.log("image will be uploaded here");
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <header style={{ background: "red" }}>Header</header>
+      <MyEditor
+        canvasWidth={700}
+        canvasHeight={700}
+        canvasObjects={canvasObjects}
+      />
+      <input type="file" onChange={fileChangedHandler} />
+      <button onClick={uploadHandler}>Upload!</button>
     </div>
   );
 }
