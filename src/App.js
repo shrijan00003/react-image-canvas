@@ -1,5 +1,6 @@
-import React, { useState } from "react";
 import UUID from "uuid/v4";
+import React, { useState } from "react";
+import { SketchPicker } from "react-color";
 
 import "./App.css";
 import MyEditor from "./components/ImageEditor/ImageEditor";
@@ -7,6 +8,7 @@ import FilterComponent from "./components/ImageEditor/FilterComponent";
 
 function App() {
   const [canvasObjects, setcanvasObject] = useState([]);
+  const [canvasBgColor, setCanvasBgColor] = useState("#ddd");
 
   /**
    * @description uploading image from the computer
@@ -26,9 +28,6 @@ function App() {
     };
     const newCanvasObject = [...canvasObjects, imgObj];
     setcanvasObject(newCanvasObject);
-  };
-  const uploadHandler = () => {
-    console.log("image will be uploaded here");
   };
 
   /**
@@ -68,14 +67,15 @@ function App() {
     setcanvasObject(items);
   };
 
-  const addFilter = () => {
-    console.log("fileter will be added");
+  const handleChangeComplete = color => {
+    setCanvasBgColor(color.hex);
   };
 
   return (
     <div className="App">
       <header style={{ background: "red" }}>Header</header>
       <MyEditor
+        bgColor={canvasBgColor}
         canvasWidth={700}
         canvasHeight={700}
         canvasObjects={canvasObjects}
@@ -83,6 +83,21 @@ function App() {
         onItemDragEnd={handleItemDragEnd}
       />
 
+      <div className="editor-color-picker-wrapper">
+        Please choose background color
+        <span
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center"
+          }}
+        >
+          <SketchPicker
+            color={canvasBgColor}
+            onChangeComplete={handleChangeComplete}
+          />
+        </span>
+      </div>
       <FilterComponent />
       <input type="file" onChange={fileChangedHandler} />
     </div>

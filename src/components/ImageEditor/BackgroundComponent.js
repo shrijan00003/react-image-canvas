@@ -3,7 +3,7 @@ import { Rect } from "react-konva";
 const BackgroundComponent = ({
   width = 500,
   height = 500,
-  color = "red",
+  color = "#fff",
   shadowBlur = 10
 }) => (
   <Rect

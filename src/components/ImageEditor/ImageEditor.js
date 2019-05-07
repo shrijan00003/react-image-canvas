@@ -1,5 +1,5 @@
-import { Stage, Layer, Rect } from "react-konva";
-import React, { useState, useEffect } from "react";
+import { Stage, Layer } from "react-konva";
+import React, { useState } from "react";
 
 import ImageComponent from "./ImageComponent";
 import TransformerComponent from "./Transformer";
@@ -7,12 +7,6 @@ import BackgroundComponent from "./BackgroundComponent";
 
 const ImageEditor = props => {
   let stageNode = React.createRef();
-
-  useEffect(() => {
-    console.log(stageNode);
-    const parent = stageNode.getParent();
-    console.log("parent", parent);
-  }, [stageNode]);
 
   const [selectedShapeName, setSelectedShapeName] = useState("");
 
@@ -68,7 +62,7 @@ const ImageEditor = props => {
             <BackgroundComponent
               width={props.canvasWidth}
               height={props.canvasHeight}
-              color="#ddd"
+              color={props.bgColor}
               shadowBlur={10}
             />
             {props.canvasObjects &&
