@@ -10,6 +10,8 @@ function App() {
   const [canvasObjects, setcanvasObject] = useState([]);
   const [canvasBgColor, setCanvasBgColor] = useState("#ddd");
 
+  const formatName = str => str.replace(/\s+/g, "-").toLowerCase();
+
   /**
    * @description uploading image from the computer
    * @param {*} e
@@ -17,8 +19,9 @@ function App() {
   const fileChangedHandler = e => {
     const imgFile = e.target.files[0];
     const imgId = UUID();
+    const imgName = formatName(imgFile.name);
     const imgObj = {
-      name: `${imgFile.name}_${imgId}`,
+      name: `${imgName}_${imgId}`,
       id: imgId,
       file: imgFile,
       type: imgFile.type,
