@@ -1,6 +1,5 @@
 {
   "name": "react-image-canvas",
-  "homepage": "https://github.com/shrijan00003/react-image-canvas",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -12,7 +11,9 @@
     "react-konva": "^16.8.6",
     "react-redux": "^7.0.3",
     "react-scripts": "3.0.0",
+    "recompose": "^0.30.0",
     "redux": "^4.0.1",
+    "shortid": "^2.2.14",
     "use-image": "^1.0.3"
   },
   "scripts": {

@@ -1,12 +1,8 @@
+import { Stage, Layer } from "react-konva";
 import React, { useState, useEffect } from "react";
-import { Stage, Layer, Image } from "react-konva";
-import useImage from "use-image";
-import TransformerComponent from "./Transformer";
 
-const ImageComponent = ({ file }) => {
-  const [image] = useImage(file.imgUrl);
-  return <Image image={image} name={file.name} draggable />;
-};
+import ImageComponent from "./ImageComponent";
+import TransformerComponent from "./Transformer";
 
 const ImageEditor = props => {
   const [availableOptions, setAvailableOptions] = useState({
@@ -35,17 +31,14 @@ const ImageEditor = props => {
     // find clicked rect by its name
     const name = e.target.name();
 
-    // const rect = this.state.rectangles.find(r => r.name === name);
-    // if (rect) {
-    //   this.setState({
-    //     selectedShapeName: name
-    //   });
-    // } else {
-    //   this.setState({
-    //     selectedShapeName: ''
-    //   });
-    // }
-    setSelectedShapeName(name);
+    const obj = props.canvasObjects.find(
+      obj => String(obj.name) === String(name)
+    );
+    if (obj) {
+      setSelectedShapeName(name);
+    } else {
+      setSelectedShapeName("");
+    }
   };
 
   useEffect(() => {
@@ -73,15 +66,20 @@ const ImageEditor = props => {
         <Stage
           width={props.canvasWidth}
           height={props.canvasHeight}
-          onMouseDown={handleStageMouseDown}
+          onClick={handleStageMouseDown}
           ref={node => {
             stageNode = node;
           }}
         >
           <Layer>
             {props.canvasObjects &&
-              props.canvasObjects.map((obj, index) => (
-                <ImageComponent key={index} file={obj} />
+              props.canvasObjects.map(obj => (
+                <ImageComponent
+                  key={obj.id}
+                  file={obj}
+                  onDragStart={props.onItemDragStart}
+                  onDragEnd={props.onItemDragEnd}
+                />
               ))}
             <TransformerComponent selectedShapeName={selectedShapeName} />
           </Layer>
