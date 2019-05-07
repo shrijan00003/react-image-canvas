@@ -1,34 +1,32 @@
-import { Stage, Layer } from "react-konva";
+import { Stage, Layer, Rect } from "react-konva";
 import React, { useState, useEffect } from "react";
 
 import ImageComponent from "./ImageComponent";
 import TransformerComponent from "./Transformer";
+import BackgroundComponent from "./BackgroundComponent";
 
 const ImageEditor = props => {
-  const [availableOptions, setAvailableOptions] = useState({
-    image: false,
-    shapes: false,
-    filter: false
-  });
-
   let stageNode = React.createRef();
+
+  useEffect(() => {
+    console.log(stageNode);
+    const parent = stageNode.getParent();
+    console.log("parent", parent);
+  }, [stageNode]);
 
   const [selectedShapeName, setSelectedShapeName] = useState("");
 
   const handleStageMouseDown = e => {
-    // clicked on stage - cler selection
     if (e.target === e.target.getStage()) {
       setSelectedShapeName("");
       return;
     }
-    // clicked on transformer - do nothing
     const clickedOnTransformer =
       e.target.getParent().className === "Transformer";
     if (clickedOnTransformer) {
       return;
     }
 
-    // find clicked rect by its name
     const name = e.target.name();
 
     const obj = props.canvasObjects.find(
@@ -41,15 +39,10 @@ const ImageEditor = props => {
     }
   };
 
-  useEffect(() => {
-    const newOptions = { ...availableOptions, shapes: false };
-    setAvailableOptions(newOptions);
-  }, [availableOptions]);
-
-  const onSaveImage = e => {
-    console.log("event here", e);
-    console.log("stage node here", stageNode.getStage().toDataURL());
-  };
+  // const onSaveImage = e => {
+  //   console.log("event here", e);
+  //   console.log("stage node here", stageNode.getStage().toDataURL());
+  // };
 
   return (
     <>
@@ -72,6 +65,12 @@ const ImageEditor = props => {
           }}
         >
           <Layer>
+            <BackgroundComponent
+              width={props.canvasWidth}
+              height={props.canvasHeight}
+              color="#ddd"
+              shadowBlur={10}
+            />
             {props.canvasObjects &&
               props.canvasObjects.map(obj => (
                 <ImageComponent
@@ -85,7 +84,7 @@ const ImageEditor = props => {
           </Layer>
         </Stage>
         <br />
-        <button onClick={onSaveImage}>save image</button>
+        {/* <button onClick={onSaveImage}>save image</button> */}
       </div>
     </>
   );

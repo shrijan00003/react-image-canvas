@@ -3,10 +3,15 @@ import UUID from "uuid/v4";
 
 import "./App.css";
 import MyEditor from "./components/ImageEditor/ImageEditor";
+import FilterComponent from "./components/ImageEditor/FilterComponent";
 
 function App() {
   const [canvasObjects, setcanvasObject] = useState([]);
 
+  /**
+   * @description uploading image from the computer
+   * @param {*} e
+   */
   const fileChangedHandler = e => {
     const imgFile = e.target.files[0];
     const imgId = UUID();
@@ -28,10 +33,9 @@ function App() {
 
   /**
    * @description it will remove the selected object from the array and push it in the last
-   * @param {*} id
+   * @param {*} e
    */
   const handleItemDragStart = e => {
-    console.log("on drag start", e.target.x(), e.target.y());
     const name = e.target.name();
     const items = canvasObjects.slice();
     const item = items.find(i => String(i.name) === String(name));
@@ -41,21 +45,19 @@ function App() {
     // add to the top
     items.push(item);
 
-    console.log("items on drag start", items);
-
-    console.log("item being dragged", name);
-
     setcanvasObject(items);
   };
 
+  /**
+   * @description handle item drag end
+   * @param {*} e
+   */
   const handleItemDragEnd = e => {
-    console.log("on drag end", e.target.x(), e.target.y());
     const name = e.target.name();
     const items = canvasObjects.slice();
     const item = items.find(i => String(i.name) === String(name));
     const index = items.indexOf(item);
 
-    console.log("index here", index);
     // update item position
     items[index] = {
       ...item,
@@ -63,8 +65,11 @@ function App() {
       y: e.target.y()
     };
 
-    console.log("items on drag end", items);
     setcanvasObject(items);
+  };
+
+  const addFilter = () => {
+    console.log("fileter will be added");
   };
 
   return (
@@ -77,9 +82,9 @@ function App() {
         onItemDragStart={handleItemDragStart}
         onItemDragEnd={handleItemDragEnd}
       />
+
+      <FilterComponent />
       <input type="file" onChange={fileChangedHandler} />
-      <button onClick={uploadHandler}>Next</button>
-      <br />
     </div>
   );
 }
