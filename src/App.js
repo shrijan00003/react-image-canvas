@@ -9,9 +9,10 @@ function App() {
 
   const fileChangedHandler = e => {
     const imgFile = e.target.files[0];
+    const imgId = UUID();
     const imgObj = {
-      name: imgFile.name,
-      id: UUID(),
+      name: `${imgFile.name}_${imgId}`,
+      id: imgId,
       file: imgFile,
       type: imgFile.type,
       imgUrl: URL.createObjectURL(imgFile)
