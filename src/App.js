@@ -48,7 +48,7 @@ function App() {
     setcanvasObject(items);
   };
 
-  const handleItemDragEnd = async e => {
+  const handleItemDragEnd = e => {
     console.log("on drag end", e.target.x(), e.target.y());
     const name = e.target.name();
     const items = canvasObjects.slice();
@@ -59,8 +59,8 @@ function App() {
     // update item position
     items[index] = {
       ...item,
-      x: await e.target.x(),
-      y: await e.target.y()
+      x: e.target.x(),
+      y: e.target.y()
     };
 
     console.log("items on drag end", items);
