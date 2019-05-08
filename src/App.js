@@ -119,20 +119,31 @@ function App() {
     console.log("image on blur", e);
   };
 
+  const deleteNode = name => {
+    console.log("deleting node", name);
+    const newCanvasObjects = canvasObjects.filter(
+      obj => String(obj.name) !== String(name)
+    );
+    setcanvasObject(newCanvasObjects);
+  };
+
   return (
     <div className="App">
       <header style={{ background: "red" }}>Header</header>
-      <MyEditor
-        filters={filters}
-        canvasWidth={700}
-        canvasHeight={700}
-        bgColor={canvasBgColor}
-        canvasObjects={canvasObjects}
-        onItemDragEnd={handleItemDragEnd}
-        filterProperties={filterProperties}
-        onItemDragStart={handleItemDragStart}
-        handleImageOnBlur={handleImageOnBlur}
-      />
+      <div>
+        <MyEditor
+          filters={filters}
+          canvasWidth={700}
+          canvasHeight={700}
+          bgColor={canvasBgColor}
+          canvasObjects={canvasObjects}
+          onItemDragEnd={handleItemDragEnd}
+          filterProperties={filterProperties}
+          onItemDragStart={handleItemDragStart}
+          handleImageOnBlur={handleImageOnBlur}
+          onDeleteNode={deleteNode}
+        />
+      </div>
 
       <div className="editor-color-picker-wrapper">
         Please choose background color
@@ -153,6 +164,7 @@ function App() {
         onValueChange={handleValueChange}
         filterProperties={filterProperties}
       />
+
       <input type="file" onChange={fileChangedHandler} />
     </div>
   );

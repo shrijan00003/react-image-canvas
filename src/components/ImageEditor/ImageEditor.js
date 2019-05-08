@@ -41,8 +41,16 @@ const ImageEditor = props => {
   //   console.log("stage node here", stageNode.getStage().toDataURL());
   // };
 
+  const handleDeletingNode = () => {
+    //simply check if empty we need to add other condition as well
+    if (selectedShapeName !== "") {
+      console.log("selected node is not empty");
+      props.onDeleteNode(selectedShapeName);
+    }
+  };
+
   return (
-    <>
+    <div>
       <p> Hello from editor !!</p>
       <p> you can upload multiple images at once as well!!</p>
       <div
@@ -92,7 +100,10 @@ const ImageEditor = props => {
         <br />
         {/* <button onClick={onSaveImage}>save image</button> */}
       </div>
-    </>
+      <div>
+        <button onClick={handleDeletingNode}>Delete</button>
+      </div>
+    </div>
   );
 };
 
