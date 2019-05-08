@@ -40,6 +40,8 @@ function App() {
     initialFilterProperties
   );
 
+  let textAreaRef = React.createRef();
+
   useEffect(() => {
     const newFilters = [];
     for (let i = 0; i < filterOptions.length; i++) {
@@ -123,6 +125,11 @@ function App() {
     console.log("image on blur", e);
   };
 
+  const addTextToCanvas = e => {
+    console.log("event here", e);
+    console.log("text area node", textAreaRef.value);
+  };
+
   const deleteNode = name => {
     const newCanvasObjects = canvasObjects.filter(
       obj => String(obj.name) !== String(name)
@@ -146,6 +153,18 @@ function App() {
           handleImageOnBlur={handleImageOnBlur}
           onDeleteNode={deleteNode}
         />
+      </div>
+
+      <div
+        className="editor-text-input-wrapper"
+        style={{
+          display: "block",
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
+        <textarea rows="5" cols="30" ref={node => (textAreaRef = node)} />
+        <button onClick={addTextToCanvas}>Add Text to Canvas</button>
       </div>
 
       <div className="editor-color-picker-wrapper">
