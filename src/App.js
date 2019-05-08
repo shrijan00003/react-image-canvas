@@ -120,7 +120,6 @@ function App() {
   };
 
   const deleteNode = name => {
-    console.log("deleting node", name);
     const newCanvasObjects = canvasObjects.filter(
       obj => String(obj.name) !== String(name)
     );

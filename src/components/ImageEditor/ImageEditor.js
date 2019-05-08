@@ -44,7 +44,6 @@ const ImageEditor = props => {
   const handleDeletingNode = () => {
     //simply check if empty we need to add other condition as well
     if (selectedShapeName !== "") {
-      console.log("selected node is not empty");
       props.onDeleteNode(selectedShapeName);
     }
   };
