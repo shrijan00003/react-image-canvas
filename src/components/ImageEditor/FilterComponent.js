@@ -1,39 +1,85 @@
 import React from "react";
-import RangeComponent from "./RangeComponent";
-const FilterComponent = () => {
+const FilterComponent = ({
+  onValueChange = f => f,
+  filterProperties = {
+    blurRadius: 0,
+    red: 0,
+    green: 0,
+    blue: 0,
+    brightness: 0
+  }
+}) => {
+  const handleChange = (e, type) => {
+    onValueChange(Number(e.target.value), type);
+  };
   return (
     <>
       <div>Add filters</div>
       <div className="filter-blur-wrapper">
         Blur
         <span>
-          <RangeComponent />
+          <input
+            type="range"
+            min={0}
+            max={40}
+            step={0.05}
+            value={filterProperties.blurRadius}
+            onChange={e => handleChange(e, "blurRadius")}
+          />
         </span>
       </div>
       <div className="filter-rgb-wrapper">
         <div className="filter-rgb-red-wrapper">
           Red
           <span>
-            <RangeComponent />
+            <input
+              type="range"
+              min={0}
+              max={256}
+              step={1}
+              value={filterProperties.red}
+              onChange={e => handleChange(e, "red")}
+            />
           </span>
         </div>
         <div className="filter-rgb-green-wrapper">
           Green
           <span>
-            <RangeComponent />
+            <input
+              type="range"
+              min={0}
+              max={256}
+              step={1}
+              value={filterProperties.green}
+              onChange={e => handleChange(e, "green")}
+            />
           </span>
         </div>
         <div className="filter-rgb-blue-wrapper">
           Blue
           <span>
-            <RangeComponent />
+            <input
+              type="range"
+              min={0}
+              max={256}
+              step={1}
+              value={filterProperties.blue}
+              onChange={e => handleChange(e, "blue")}
+            />
           </span>
         </div>
       </div>
       <div className="filter-brighten-wrapper">
-        Brighten:
+        Brightess:
         <span>
-          <RangeComponent />
+          <input
+            type="range"
+            min={-1}
+            max={1}
+            step={0.05}
+            value={filterProperties.brightness}
+            onChange={e => handleChange(e, "brightness")}
+          />
         </span>
       </div>
     </>

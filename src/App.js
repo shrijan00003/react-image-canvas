@@ -1,22 +1,57 @@
 import UUID from "uuid/v4";
-import React, { useState } from "react";
+import Konva from "konva";
 import { SketchPicker } from "react-color";
+import React, { useState, useEffect } from "react";
 
 import "./App.css";
 import MyEditor from "./components/ImageEditor/ImageEditor";
 import FilterComponent from "./components/ImageEditor/FilterComponent";
 
+// we can add more options availabe in konva js
+const filterOptions = ["Blur", "Brighten", "Contrast", "RGB", "Noise"];
+const formatName = str => str.replace(/\s+/g, "-").toLowerCase();
+function getBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}
+
+const initialFilterProperties = {
+  blurRadius: 0,
+  shadowBlur: 10,
+  brightness: 0,
+  noise: 0,
+  red: 150,
+  blue: 150,
+  green: 150,
+  contrast: 0
+};
+
 function App() {
   const [canvasObjects, setcanvasObject] = useState([]);
   const [canvasBgColor, setCanvasBgColor] = useState("#ddd");
 
-  const formatName = str => str.replace(/\s+/g, "-").toLowerCase();
+  const [filters, setFilters] = useState([]);
+  const [filterProperties, setFilterProperties] = useState(
+    initialFilterProperties
+  );
+
+  useEffect(() => {
+    const newFilters = [];
+    for (let i = 0; i < filterOptions.length; i++) {
+      newFilters.push(Konva.Filters[filterOptions[i]]);
+    }
+    setFilters(newFilters);
+  }, []);
 
   /**
    * @description uploading image from the computer
    * @param {*} e
    */
-  const fileChangedHandler = e => {
+  const fileChangedHandler = async e => {
     const imgFile = e.target.files[0];
     const imgId = UUID();
     const imgName = formatName(imgFile.name);
@@ -25,6 +60,7 @@ function App() {
       id: imgId,
       file: imgFile,
       type: imgFile.type,
+      base64url: await getBase64(imgFile),
       imgUrl: URL.createObjectURL(imgFile),
       x: Math.random() * 500,
       y: Math.random() * 500
@@ -70,20 +106,32 @@ function App() {
     setcanvasObject(items);
   };
 
+  const handleValueChange = (value, prop) => {
+    const newFilterProperties = { ...filterProperties, [prop]: value };
+    setFilterProperties(newFilterProperties);
+  };
+
   const handleChangeComplete = color => {
     setCanvasBgColor(color.hex);
+  };
+
+  const handleImageOnBlur = e => {
+    console.log("image on blur", e);
   };
 
   return (
     <div className="App">
       <header style={{ background: "red" }}>Header</header>
       <MyEditor
-        bgColor={canvasBgColor}
+        filters={filters}
         canvasWidth={700}
         canvasHeight={700}
+        bgColor={canvasBgColor}
         canvasObjects={canvasObjects}
-        onItemDragStart={handleItemDragStart}
         onItemDragEnd={handleItemDragEnd}
+        filterProperties={filterProperties}
+        onItemDragStart={handleItemDragStart}
+        handleImageOnBlur={handleImageOnBlur}
       />
 
       <div className="editor-color-picker-wrapper">
@@ -101,7 +149,10 @@ function App() {
           />
         </span>
       </div>
-      <FilterComponent />
+      <FilterComponent
+        onValueChange={handleValueChange}
+        filterProperties={filterProperties}
+      />
       <input type="file" onChange={fileChangedHandler} />
     </div>
   );

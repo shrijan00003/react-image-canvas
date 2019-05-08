@@ -10,6 +10,9 @@ const ImageEditor = props => {
 
   const [selectedShapeName, setSelectedShapeName] = useState("");
 
+  /**
+   * @param {*} e
+   */
   const handleStageMouseDown = e => {
     if (e.target === e.target.getStage()) {
       setSelectedShapeName("");
@@ -70,6 +73,15 @@ const ImageEditor = props => {
                 <ImageComponent
                   key={obj.id}
                   file={obj}
+                  filters={
+                    obj.name === selectedShapeName ? props.filters : undefined
+                  }
+                  properties={
+                    obj.name === selectedShapeName
+                      ? props.filterProperties
+                      : undefined
+                  }
+                  onBlur={props.handleImageOnBlur}
                   onDragStart={props.onItemDragStart}
                   onDragEnd={props.onItemDragEnd}
                 />

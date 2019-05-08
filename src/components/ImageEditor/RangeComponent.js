@@ -4,7 +4,7 @@ const RangeComponent = ({
   min = 0,
   max = 40,
   step = 0.1,
-  value = 20,
+  value = 0,
   classList = "",
   onChangeHandler = f => f
 }) => (
