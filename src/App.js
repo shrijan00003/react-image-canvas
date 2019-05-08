@@ -6,6 +6,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import MyEditor from "./components/ImageEditor/ImageEditor";
 import FilterComponent from "./components/ImageEditor/FilterComponent";
+import { getImageSize } from "./components/ImageEditor/ImageUtils";
 
 // we can add more options availabe in konva js
 const filterOptions = ["Blur", "Brighten", "Contrast", "RGB", "Noise"];
@@ -62,9 +63,12 @@ function App() {
       type: imgFile.type,
       base64url: await getBase64(imgFile),
       imgUrl: URL.createObjectURL(imgFile),
+      imageSize: await getImageSize(imgFile),
       x: Math.random() * 500,
       y: Math.random() * 500
     };
+
+    console.log("image object", imgObj);
     const newCanvasObject = [...canvasObjects, imgObj];
     setcanvasObject(newCanvasObject);
   };

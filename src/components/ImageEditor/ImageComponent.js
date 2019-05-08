@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 // import useImage from "use-image";
 import { pure } from "recompose";
 import { Image } from "react-konva";
+import { getResolution } from "./ImageUtils";
 
 const ImageComponent = ({
   file,
@@ -25,6 +26,18 @@ const ImageComponent = ({
     };
   }, [file.base64url, image, imgRef]);
 
+  const windowSize = {
+    width: window.innerWidth,
+    height: window.innerHeight
+  };
+  const canvasSize = {
+    width: 700,
+    height: 700
+  };
+
+  const width = getResolution(file.imageSize, windowSize, canvasSize).width;
+  const height = getResolution(file.imageSize, windowSize, canvasSize).height;
+
   return (
     <Image
       filters={filters}
@@ -37,8 +50,8 @@ const ImageComponent = ({
       draggable
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
-      width={200}
-      height={200}
+      width={width || 200}
+      height={height || 200}
       ref={node => {
         imgRef = node;
       }}
