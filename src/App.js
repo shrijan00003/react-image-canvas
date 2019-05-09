@@ -3,6 +3,8 @@ import Konva from "konva";
 import { SketchPicker } from "react-color";
 import React, { useState, useEffect } from "react";
 
+import Helmet from "react-helmet";
+
 import "./App.css";
 import MyEditor from "./components/ImageEditor/ImageEditor";
 import FilterComponent from "./components/ImageEditor/FilterComponent";
@@ -171,6 +173,9 @@ function App() {
   const addTextToCanvas = e => {
     const name = UUID();
     const newTextObject = {
+      fontFamily: "Lato" || "Calibri",
+      fontSize: 16,
+      align: "center",
       filters: [],
       name,
       text: textAreaRef.value,
@@ -209,6 +214,14 @@ function App() {
 
   return (
     <div className="App">
+      <Helmet
+        link={[
+          {
+            href: "https://fonts.googleapis.com/css?family=Lato",
+            rel: "stylesheet"
+          }
+        ]}
+      />
       <header style={{ background: "red" }}>Header</header>
       <div>
         <MyEditor
