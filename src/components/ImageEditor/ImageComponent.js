@@ -46,7 +46,6 @@ const ImageComponent = ({
       y={file.y}
       image={image}
       name={file.name}
-      id={file.id}
       draggable
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}

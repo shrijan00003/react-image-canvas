@@ -9,14 +9,12 @@ import BackgroundComponent from "./BackgroundComponent";
 const ImageEditor = props => {
   let stageNode = React.createRef();
 
-  const [selectedShapeName, setSelectedShapeName] = useState("");
-
   /**
    * @param {*} e
    */
   const handleStageMouseDown = e => {
     if (e.target === e.target.getStage()) {
-      setSelectedShapeName("");
+      props.setSelectedShapeName("");
       return;
     }
     const clickedOnTransformer =
@@ -35,9 +33,9 @@ const ImageEditor = props => {
       obj => String(obj.name) === String(name)
     );
     if (obj || text) {
-      setSelectedShapeName(name);
+      props.setSelectedShapeName(name);
     } else {
-      setSelectedShapeName("");
+      props.setSelectedShapeName("");
     }
   };
 
@@ -48,8 +46,8 @@ const ImageEditor = props => {
 
   const handleDeletingNode = () => {
     //simply check if empty we need to add other condition as well
-    if (selectedShapeName !== "") {
-      props.onDeleteNode(selectedShapeName);
+    if (props.selectedShapeName !== "") {
+      props.onDeleteNode(props.selectedShapeName);
     }
   };
 
@@ -83,13 +81,15 @@ const ImageEditor = props => {
             {props.canvasObjects &&
               props.canvasObjects.map(obj => (
                 <ImageComponent
-                  key={obj.id}
+                  key={obj.name}
                   file={obj}
                   filters={
-                    obj.name === selectedShapeName ? props.filters : undefined
+                    obj.name === props.selectedShapeName
+                      ? props.filters
+                      : undefined
                   }
                   properties={
-                    obj.name === selectedShapeName
+                    obj.name === props.selectedShapeName
                       ? props.filterProperties
                       : undefined
                   }
@@ -103,7 +103,7 @@ const ImageEditor = props => {
               props.textObjects.map(obj => (
                 <TextComponent key={obj.name} props={obj} />
               ))}
-            <TransformerComponent selectedShapeName={selectedShapeName} />
+            <TransformerComponent selectedShapeName={props.selectedShapeName} />
           </Layer>
         </Stage>
         <br />

@@ -10,7 +10,8 @@ const FilterComponent = ({
   }
 }) => {
   const handleChange = (e, type) => {
-    onValueChange(Number(e.target.value), type);
+    const name = e.target.name;
+    onValueChange(Number(e.target.value), type, name);
   };
   return (
     <>
@@ -24,6 +25,7 @@ const FilterComponent = ({
             max={40}
             step={0.05}
             value={filterProperties.blurRadius}
+            name="Blur"
             onChange={e => handleChange(e, "blurRadius")}
           />
         </span>
@@ -37,6 +39,7 @@ const FilterComponent = ({
               min={0}
               max={256}
               step={1}
+              name="RGB"
               value={filterProperties.red}
               onChange={e => handleChange(e, "red")}
             />
@@ -50,6 +53,7 @@ const FilterComponent = ({
               min={0}
               max={256}
               step={1}
+              name="RGB"
               value={filterProperties.green}
               onChange={e => handleChange(e, "green")}
             />
@@ -63,6 +67,7 @@ const FilterComponent = ({
               min={0}
               max={256}
               step={1}
+              name="RGB"
               value={filterProperties.blue}
               onChange={e => handleChange(e, "blue")}
             />
@@ -77,6 +82,7 @@ const FilterComponent = ({
             min={-1}
             max={1}
             step={0.05}
+            name="Brighten"
             value={filterProperties.brightness}
             onChange={e => handleChange(e, "brightness")}
           />

@@ -37,6 +37,8 @@ function App() {
   const [canvasBgColor, setCanvasBgColor] = useState("#ddd");
   const [textObjects, setTextObjects] = useState([]);
 
+  const [selectedShapeName, setSelectedShapeName] = useState("");
+
   const [filters, setFilters] = useState([]);
   const [filterProperties, setFilterProperties] = useState(
     initialFilterProperties
@@ -59,16 +61,16 @@ function App() {
   const fileChangedHandler = async e => {
     const imgFile = e.target.files[0];
     const imgId = UUID();
-    const imgName = formatName(imgFile.name);
+    const fileName = formatName(imgFile.name);
     const imgObj = {
-      name: `${imgName}_${imgId}`,
-      id: imgId,
+      name: imgId,
+      fileName,
       file: imgFile,
       type: imgFile.type,
       base64url: await getBase64(imgFile),
       imgUrl: URL.createObjectURL(imgFile),
       imageSize: await getImageSize(imgFile),
-      x: Math.random() * 500,
+      x: Math.random() * 500, // we need to find blank spaces
       y: Math.random() * 500
     };
 
@@ -114,7 +116,15 @@ function App() {
     setcanvasObject(items);
   };
 
-  const handleValueChange = (value, prop) => {
+  /**
+   *
+   * @param {*} value value from range
+   * @param {*} prop property of filter
+   * @param {*} name of filter
+   */
+  const handleValueChange = (value, prop, name) => {
+    // find the selected object in the object arrays
+    // add filters to that objects
     const newFilterProperties = { ...filterProperties, [prop]: value };
     setFilterProperties(newFilterProperties);
   };
@@ -183,6 +193,8 @@ function App() {
           onItemDragStart={handleItemDragStart}
           handleImageOnBlur={handleImageOnBlur}
           onDeleteNode={deleteNode}
+          selectedShapeName={selectedShapeName}
+          setSelectedShapeName={setSelectedShapeName}
         />
       </div>
 
