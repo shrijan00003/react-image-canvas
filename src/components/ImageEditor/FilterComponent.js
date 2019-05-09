@@ -1,14 +1,5 @@
 import React from "react";
-const FilterComponent = ({
-  onValueChange = f => f,
-  filterProperties = {
-    blurRadius: 0,
-    red: 0,
-    green: 0,
-    blue: 0,
-    brightness: 0
-  }
-}) => {
+const FilterComponent = ({ onValueChange = f => f, selectedObject = {} }) => {
   const handleChange = (e, type) => {
     const name = e.target.name;
     onValueChange(Number(e.target.value), type, name);
@@ -24,7 +15,7 @@ const FilterComponent = ({
             min={0}
             max={40}
             step={0.05}
-            value={filterProperties.blurRadius}
+            value={selectedObject.blurRadius || 0}
             name="Blur"
             onChange={e => handleChange(e, "blurRadius")}
           />
@@ -40,7 +31,7 @@ const FilterComponent = ({
               max={256}
               step={1}
               name="RGB"
-              value={filterProperties.red}
+              value={selectedObject.red || 150}
               onChange={e => handleChange(e, "red")}
             />
           </span>
@@ -54,7 +45,7 @@ const FilterComponent = ({
               max={256}
               step={1}
               name="RGB"
-              value={filterProperties.green}
+              value={selectedObject.green || 150}
               onChange={e => handleChange(e, "green")}
             />
           </span>
@@ -68,7 +59,7 @@ const FilterComponent = ({
               max={256}
               step={1}
               name="RGB"
-              value={filterProperties.blue}
+              value={selectedObject.blue || 150}
               onChange={e => handleChange(e, "blue")}
             />
           </span>
@@ -83,7 +74,7 @@ const FilterComponent = ({
             max={1}
             step={0.05}
             name="Brighten"
-            value={filterProperties.brightness}
+            value={selectedObject.brightness || 0}
             onChange={e => handleChange(e, "brightness")}
           />
         </span>

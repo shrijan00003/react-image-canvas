@@ -16,7 +16,7 @@ const ImageComponent = ({
   // for getting image from url
   // const [image] = useImage(file.imgUrl);
 
-  const [image, setImage] = useState(new window.Image());
+  const [image] = useState(new window.Image());
 
   useEffect(() => {
     image.src = file.base64url;
@@ -40,12 +40,8 @@ const ImageComponent = ({
 
   return (
     <Image
-      filters={filters}
-      {...properties}
-      x={file.x}
-      y={file.y}
+      {...file}
       image={image}
-      name={file.name}
       draggable
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}

@@ -6,10 +6,9 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import MyEditor from "./components/ImageEditor/ImageEditor";
 import FilterComponent from "./components/ImageEditor/FilterComponent";
-import { getImageSize } from "./components/ImageEditor/ImageUtils";
+import { getImageSize, isEmpty } from "./components/ImageEditor/ImageUtils";
 
 // we can add more options availabe in konva js
-const filterOptions = ["Blur", "Brighten", "Contrast", "RGB", "Noise"];
 const formatName = str => str.replace(/\s+/g, "-").toLowerCase();
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -20,17 +19,6 @@ function getBase64(file) {
   });
 }
 
-const initialFilterProperties = {
-  blurRadius: 0,
-  shadowBlur: 10,
-  brightness: 0,
-  noise: 0,
-  red: 150,
-  blue: 150,
-  green: 150,
-  contrast: 0
-};
-
 function App() {
   // used for images
   const [canvasObjects, setcanvasObject] = useState([]);
@@ -38,21 +26,26 @@ function App() {
   const [textObjects, setTextObjects] = useState([]);
 
   const [selectedShapeName, setSelectedShapeName] = useState("");
-
-  const [filters, setFilters] = useState([]);
-  const [filterProperties, setFilterProperties] = useState(
-    initialFilterProperties
-  );
-
-  let textAreaRef = React.createRef();
+  const [selectedObject, setSelectedObject] = useState({});
 
   useEffect(() => {
-    const newFilters = [];
-    for (let i = 0; i < filterOptions.length; i++) {
-      newFilters.push(Konva.Filters[filterOptions[i]]);
+    if (!isEmpty(selectedShapeName)) {
+      const imgFound = canvasObjects.find(
+        obj => String(obj.name) === String(selectedShapeName)
+      );
+      const textFound = textObjects.find(
+        obj => String(obj.name) === String(selectedShapeName)
+      );
+      if (imgFound) {
+        setSelectedObject(imgFound);
+      }
+      if (textFound) {
+        setSelectedObject(textFound);
+      }
     }
-    setFilters(newFilters);
-  }, []);
+  }, [selectedShapeName, canvasObjects, textObjects]);
+
+  let textAreaRef = React.createRef();
 
   /**
    * @description uploading image from the computer
@@ -67,6 +60,7 @@ function App() {
       fileName,
       file: imgFile,
       type: imgFile.type,
+      filters: [],
       base64url: await getBase64(imgFile),
       imgUrl: URL.createObjectURL(imgFile),
       imageSize: await getImageSize(imgFile),
@@ -74,7 +68,6 @@ function App() {
       y: Math.random() * 500
     };
 
-    console.log("image object", imgObj);
     const newCanvasObject = [...canvasObjects, imgObj];
     setcanvasObject(newCanvasObject);
   };
@@ -120,28 +113,65 @@ function App() {
    *
    * @param {*} value value from range
    * @param {*} prop property of filter
-   * @param {*} name of filter
+   * @param {*} name of filter like Blur
    */
-  const handleValueChange = (value, prop, name) => {
+  const handleFilterValueChange = (value, prop, name) => {
     // find the selected object in the object arrays
+    if (!isEmpty(selectedShapeName)) {
+      const imgFound = canvasObjects.find(
+        obj => String(obj.name) === String(selectedShapeName)
+      );
+      const textFound = textObjects.find(
+        obj => String(obj.name) === String(selectedShapeName)
+      );
+      if (imgFound) {
+        const items = canvasObjects.slice();
+        const imgIndex = items.indexOf(imgFound);
+        const filterFound = imgFound.filters.find(
+          ff => String(ff) === String(Konva.Filters[name])
+        );
+        items[imgIndex] = {
+          ...imgFound,
+          filters: filterFound
+            ? imgFound.filters
+            : [...imgFound.filters, Konva.Filters[name]],
+          [prop]: value
+        };
+        setcanvasObject(items);
+        return;
+      }
+      if (textFound) {
+        const items = textObjects.slice();
+        const textIndex = items.indexOf(textFound);
+        const filterFound = textFound.filters.find(
+          ff => String(ff) === String(Konva.Filters[name])
+        );
+        items[textIndex] = {
+          ...textFound,
+          filters: filterFound
+            ? textFound.filters
+            : [...textFound.filters, Konva.Filters[name]],
+          [prop]: value
+        };
+        setTextObjects(items);
+        return;
+      }
+    }
+    return null;
+
     // add filters to that objects
-    const newFilterProperties = { ...filterProperties, [prop]: value };
-    setFilterProperties(newFilterProperties);
+    // const newFilterProperties = { ...filterProperties, [prop]: value };
+    // setFilterProperties(newFilterProperties);
   };
 
   const handleChangeComplete = color => {
     setCanvasBgColor(color.hex);
   };
 
-  const handleImageOnBlur = e => {
-    console.log("image on blur", e);
-  };
-
   const addTextToCanvas = e => {
-    console.log("event here", e);
-    console.log("text area node", textAreaRef.value);
     const name = UUID();
     const newTextObject = {
+      filters: [],
       name,
       text: textAreaRef.value,
       fill: "#000"
@@ -182,16 +212,13 @@ function App() {
       <header style={{ background: "red" }}>Header</header>
       <div>
         <MyEditor
-          filters={filters}
           canvasWidth={700}
           canvasHeight={700}
           bgColor={canvasBgColor}
           canvasObjects={canvasObjects}
           textObjects={textObjects}
           onItemDragEnd={handleItemDragEnd}
-          filterProperties={filterProperties}
           onItemDragStart={handleItemDragStart}
-          handleImageOnBlur={handleImageOnBlur}
           onDeleteNode={deleteNode}
           selectedShapeName={selectedShapeName}
           setSelectedShapeName={setSelectedShapeName}
@@ -226,8 +253,8 @@ function App() {
         </span>
       </div>
       <FilterComponent
-        onValueChange={handleValueChange}
-        filterProperties={filterProperties}
+        onValueChange={handleFilterValueChange}
+        selectedObject={selectedObject}
       />
 
       <input type="file" onChange={fileChangedHandler} />

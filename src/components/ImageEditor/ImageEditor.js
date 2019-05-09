@@ -1,10 +1,11 @@
 import { Stage, Layer } from "react-konva";
-import React, { useState } from "react";
+import React from "react";
 
 import ImageComponent from "./ImageComponent";
 import TextComponent from "./TextComponent";
 import TransformerComponent from "./Transformer";
 import BackgroundComponent from "./BackgroundComponent";
+import { isEmpty } from "./ImageUtils";
 
 const ImageEditor = props => {
   let stageNode = React.createRef();
@@ -17,6 +18,10 @@ const ImageEditor = props => {
       props.setSelectedShapeName("");
       return;
     }
+    if (!isEmpty(props.selectedShapeName)) {
+      props.setSelectedShapeName("");
+      return;
+    }
     const clickedOnTransformer =
       e.target.getParent().className === "Transformer";
     if (clickedOnTransformer) {
@@ -24,7 +29,6 @@ const ImageEditor = props => {
     }
 
     const name = e.target.name();
-    console.log("name here", name);
 
     const obj = props.canvasObjects.find(
       obj => String(obj.name) === String(name)
@@ -39,10 +43,9 @@ const ImageEditor = props => {
     }
   };
 
-  // const onSaveImage = e => {
-  //   console.log("event here", e);
-  //   console.log("stage node here", stageNode.getStage().toDataURL());
-  // };
+  const onSaveImage = e => {
+    console.log("stage node here", stageNode.getStage().toDataURL());
+  };
 
   const handleDeletingNode = () => {
     //simply check if empty we need to add other condition as well
@@ -83,17 +86,6 @@ const ImageEditor = props => {
                 <ImageComponent
                   key={obj.name}
                   file={obj}
-                  filters={
-                    obj.name === props.selectedShapeName
-                      ? props.filters
-                      : undefined
-                  }
-                  properties={
-                    obj.name === props.selectedShapeName
-                      ? props.filterProperties
-                      : undefined
-                  }
-                  onBlur={props.handleImageOnBlur}
                   onDragStart={props.onItemDragStart}
                   onDragEnd={props.onItemDragEnd}
                 />
@@ -106,11 +98,12 @@ const ImageEditor = props => {
             <TransformerComponent selectedShapeName={props.selectedShapeName} />
           </Layer>
         </Stage>
-        <br />
-        {/* <button onClick={onSaveImage}>save image</button> */}
       </div>
       <div>
         <button onClick={handleDeletingNode}>Delete</button>
+      </div>
+      <div>
+        <button onClick={onSaveImage}>save image</button>
       </div>
     </div>
   );
