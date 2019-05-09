@@ -32,8 +32,10 @@ const initialFilterProperties = {
 };
 
 function App() {
+  // used for images
   const [canvasObjects, setcanvasObject] = useState([]);
   const [canvasBgColor, setCanvasBgColor] = useState("#ddd");
+  const [textObjects, setTextObjects] = useState([]);
 
   const [filters, setFilters] = useState([]);
   const [filterProperties, setFilterProperties] = useState(
@@ -128,13 +130,41 @@ function App() {
   const addTextToCanvas = e => {
     console.log("event here", e);
     console.log("text area node", textAreaRef.value);
+    const name = UUID();
+    const newTextObject = {
+      name,
+      text: textAreaRef.value,
+      fill: "#000"
+    };
+    const newTextObjects = [...textObjects, newTextObject];
+    setTextObjects(newTextObjects);
+    textAreaRef.value = "";
   };
 
   const deleteNode = name => {
-    const newCanvasObjects = canvasObjects.filter(
-      obj => String(obj.name) !== String(name)
+    //find in canvasobjects if found delete that
+    const imgFound = canvasObjects.find(
+      obj => String(obj.name) === String(name)
     );
-    setcanvasObject(newCanvasObjects);
+    if (imgFound) {
+      const newImages = canvasObjects.filter(
+        obj => String(obj.name) !== String(name)
+      );
+      setcanvasObject(newImages);
+      return;
+    }
+    // else find in text objects and if found delete that as well
+    const textFound = textObjects.find(
+      obj => String(obj.name) === String(name)
+    );
+
+    if (textFound) {
+      const newTextObjects = textObjects.filter(
+        obj => String(obj.name) !== String(name)
+      );
+      setTextObjects(newTextObjects);
+      return;
+    }
   };
 
   return (
@@ -147,6 +177,7 @@ function App() {
           canvasHeight={700}
           bgColor={canvasBgColor}
           canvasObjects={canvasObjects}
+          textObjects={textObjects}
           onItemDragEnd={handleItemDragEnd}
           filterProperties={filterProperties}
           onItemDragStart={handleItemDragStart}

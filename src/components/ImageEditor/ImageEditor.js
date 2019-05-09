@@ -2,6 +2,7 @@ import { Stage, Layer } from "react-konva";
 import React, { useState } from "react";
 
 import ImageComponent from "./ImageComponent";
+import TextComponent from "./TextComponent";
 import TransformerComponent from "./Transformer";
 import BackgroundComponent from "./BackgroundComponent";
 
@@ -25,11 +26,15 @@ const ImageEditor = props => {
     }
 
     const name = e.target.name();
+    console.log("name here", name);
 
     const obj = props.canvasObjects.find(
       obj => String(obj.name) === String(name)
     );
-    if (obj) {
+    const text = props.textObjects.find(
+      obj => String(obj.name) === String(name)
+    );
+    if (obj || text) {
       setSelectedShapeName(name);
     } else {
       setSelectedShapeName("");
@@ -92,6 +97,11 @@ const ImageEditor = props => {
                   onDragStart={props.onItemDragStart}
                   onDragEnd={props.onItemDragEnd}
                 />
+              ))}
+
+            {props.textObjects &&
+              props.textObjects.map(obj => (
+                <TextComponent key={obj.name} props={obj} />
               ))}
             <TransformerComponent selectedShapeName={selectedShapeName} />
           </Layer>
