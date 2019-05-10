@@ -31,6 +31,8 @@ function App() {
   const [selectedObject, setSelectedObject] = useState({});
 
   useEffect(() => {
+    console.log("node env", process.env.NODE_ENV);
+    console.log("font api key", process.env.REACT_APP_GOOGLE_FONTS_KEY);
     if (!isEmpty(selectedShapeName)) {
       const imgFound = canvasObjects.find(
         obj => String(obj.name) === String(selectedShapeName)
