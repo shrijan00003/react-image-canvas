@@ -1,13 +1,12 @@
-import { Stage, Layer } from "react-konva";
 import React from "react";
+import { Stage, Layer } from "react-konva";
 
-import ImageComponent from "./ImageComponent";
-import TextComponent from "./TextComponent";
-import TransformerComponent from "./Transformer";
-import BackgroundComponent from "./BackgroundComponent";
-import { isEmpty } from "./ImageUtils";
+import TextComponent from "./text.component";
+import ImageComponent from "./image.component";
+import { isEmpty } from "../utils/image.utils";
+import { BackgroundComponent, TransformerComponent } from "./editor-components";
 
-const ImageEditor = props => {
+export const ImageEditor = props => {
   let stageNode = React.createRef();
 
   /**
@@ -108,5 +107,3 @@ const ImageEditor = props => {
     </div>
   );
 };
-
-export default ImageEditor;

@@ -1,14 +1,12 @@
-import UUID from "uuid/v4";
 import Konva from "konva";
+import UUID from "uuid/v4";
+import Helmet from "react-helmet";
 import { SketchPicker } from "react-color";
 import React, { useState, useEffect } from "react";
 
-import Helmet from "react-helmet";
-
 import "./App.css";
-import MyEditor from "./components/ImageEditor/ImageEditor";
-import FilterComponent from "./components/ImageEditor/FilterComponent";
-import { getImageSize, isEmpty } from "./components/ImageEditor/ImageUtils";
+import { ImageEditor, FilterComponent } from "./components";
+import { getImageSize, isEmpty } from "./utils/image.utils";
 
 // we can add more options availabe in konva js
 const formatName = str => str.replace(/\s+/g, "-").toLowerCase();
@@ -226,7 +224,7 @@ function App() {
       />
       <header style={{ background: "red" }}>Header</header>
       <div>
-        <MyEditor
+        <ImageEditor
           canvasWidth={700}
           canvasHeight={700}
           bgColor={canvasBgColor}

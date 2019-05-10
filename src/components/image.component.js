@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 // import useImage from "use-image";
 import { pure } from "recompose";
 import { Image } from "react-konva";
-import { getResolution } from "./ImageUtils";
+import { getResolution } from "../utils/image.utils";
 
 const ImageComponent = ({
   file,

@@ -1,6 +1,6 @@
 import React from "react";
 import { Rect } from "react-konva";
-const BackgroundComponent = ({
+export const BackgroundComponent = ({
   width = 500,
   height = 500,
   color = "#fff",
@@ -15,5 +15,3 @@ const BackgroundComponent = ({
     shadowBlur={shadowBlur}
   />
 );
-
-export default BackgroundComponent;

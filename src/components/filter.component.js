@@ -1,5 +1,9 @@
 import React from "react";
-const FilterComponent = ({ onValueChange = f => f, selectedObject = {} }) => {
+
+export const FilterComponent = ({
+  onValueChange = f => f,
+  selectedObject = {}
+}) => {
   const handleChange = (e, type) => {
     const name = e.target.name;
     onValueChange(Number(e.target.value), type, name);
@@ -82,5 +86,3 @@ const FilterComponent = ({ onValueChange = f => f, selectedObject = {} }) => {
     </>
   );
 };
-
-export default FilterComponent;

@@ -38,4 +38,4 @@ class TransformerComponent extends Component {
   }
 }
 
-export default TransformerComponent;
+export { TransformerComponent };
