@@ -2,10 +2,11 @@ import Konva from "konva";
 import UUID from "uuid/v4";
 import Helmet from "react-helmet";
 import { SketchPicker } from "react-color";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import "./App.css";
-import { ImageEditor, FilterComponent } from "./components";
+import { fetchGoogleFonts, makeFontArray } from "./services";
+import { ImageEditor, FilterComponent, SelectFont } from "./components";
 import { getImageSize, isEmpty } from "./utils/image.utils";
 
 // we can add more options availabe in konva js
@@ -28,9 +29,10 @@ function App() {
   const [selectedShapeName, setSelectedShapeName] = useState("");
   const [selectedObject, setSelectedObject] = useState({});
 
+  const [errors, setErrors] = useState({});
+  const [fonts, setFonts] = useState(null);
+
   useEffect(() => {
-    console.log("node env", process.env.NODE_ENV);
-    console.log("font api key", process.env.REACT_APP_GOOGLE_FONTS_KEY);
     if (!isEmpty(selectedShapeName)) {
       const imgFound = canvasObjects.find(
         obj => String(obj.name) === String(selectedShapeName)
@@ -46,6 +48,27 @@ function App() {
       }
     }
   }, [selectedShapeName, canvasObjects, textObjects]);
+
+  useEffect(() => {
+    const getGoogleFonts = async () => {
+      const { error, data } = await fetchGoogleFonts();
+      if (error) {
+        const newErrors = errors;
+        newErrors.font = error;
+        setErrors(newErrors);
+      } else {
+        const { fontError, fontArray } = makeFontArray(data);
+        if (fontError) {
+          const newErrors = errors;
+          newErrors.font = error;
+          setErrors(newErrors);
+        } else {
+          setFonts(fontArray);
+        }
+      }
+    };
+    getGoogleFonts();
+  }, [errors]);
 
   let textAreaRef = React.createRef();
 
@@ -212,6 +235,7 @@ function App() {
     }
   };
 
+  // console.log("erors here", errors, "fonts here", fonts);
   return (
     <div className="App">
       <Helmet
@@ -238,6 +262,9 @@ function App() {
         />
       </div>
 
+      <div className="filter-wrapper-div">
+        <SelectFont arr={fonts} />
+      </div>
       <div
         className="editor-text-input-wrapper"
         style={{
